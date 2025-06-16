@@ -14,11 +14,12 @@ import requests # Keep for get_requests_session
 import asyncio # Keep for running async QA call if needed anywhere else? (Likely only needed in chat page)
 from typing import Dict, Optional, Any # Keep necessary base types
 st.set_page_config(
-        page_title="GraphRAG Assistant",
-        page_icon="📄",
+        page_title="Document GraphRAG Q&A Assistant",
+        page_icon="📚",
         layout="wide",
         initial_sidebar_state="expanded" # Keep sidebar open initially
     )
+st.set_option('server.port', 8502)
 # Use tomli if available (standardized as tomllib)
 try:
     import tomllib
