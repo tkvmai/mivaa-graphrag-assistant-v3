@@ -1,22 +1,27 @@
+[server]
+port = 8502
+address = "0.0.0.0"
+headless = true
+
 [llm]
 #    model = "gpt-4-turbo"  # Example for OpenAI
 #    api_key = "" # Example for OpenAI (use env var preferably)
 #    base_url = "https://api.openai.com/v1/chat/completions" # Example for OpenAI
     model = "gemini-1.5-flash-latest" # Example for Gemini
-    api_key = "" # Example for Gemini (use env var preferably)
-    base_url = "https://generativelanguage.googleapis.com/v1beta/models" # Example for Gemini
+    api_key = "YOUR_LLM_API_KEY"
+    base_url = "YOUR_LLM_BASE_URL_IF_NEEDED" # Example for Gemini
     parameters = {}
     max_tokens = 2000
     [llm.ocr]
-    mistral_api_key = ""
+    mistral_api_key = "YOUR_MISTRAL_API_KEY"
 
 [llm.triple_extraction]
 #    model = "gpt-4-turbo"  # Example for OpenAI
 #    api_key = "" # Example for OpenAI (use env var preferably)
 #    base_url = "https://api.openai.com/v1/chat/completions" # Example for OpenAI
     model = "gemini-1.5-flash-latest" # Example for Gemini
-    api_key = "" # Example for Gemini (use env var preferably)
-    base_url = "https://generativelanguage.googleapis.com/v1beta/models" # Example for Gemini
+    api_key = "YOUR_LLM_API_KEY"
+    base_url = "YOUR_LLM_BASE_URL_IF_NEEDED" # Example for Gemini
     triple_extraction_max_tokens = 2000
     triple_extraction_temperature = 0.2
     max_tokens = 2000 # Adjust as needed
@@ -55,5 +60,12 @@
     enabled = true
 
 [nlp]
-    COREFERENCE_RESOLUTION_ENABLED = true  # Master switch
+    COREFERENCE_RESOLUTION_ENABLED = false
     SPACY_MODEL_NAME = "en_core_web_trf"  # Or your chosen spaCy model
+
+[vector_db]
+persist_directory = "./chroma_db_pipeline"
+collection_name = "doc_pipeline_embeddings"
+
+[database]
+name = "neo4j"
