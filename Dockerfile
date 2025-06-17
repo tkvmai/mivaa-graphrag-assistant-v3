@@ -9,8 +9,10 @@ RUN python -m spacy download en_core_web_trf
 
 COPY . .
 
-# Set the Streamlit port to 8502
+# Set Streamlit configuration
 ENV STREAMLIT_SERVER_PORT=8502
+ENV STREAMLIT_SERVER_ADDRESS=0.0.0.0
+ENV STREAMLIT_SERVER_HEADLESS=true
 
 EXPOSE 8502
 
