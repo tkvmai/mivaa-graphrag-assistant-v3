@@ -19,7 +19,6 @@ st.set_page_config(
         layout="wide",
         initial_sidebar_state="expanded" # Keep sidebar open initially
     )
-st.set_option('server.port', 8502)
 # Use tomli if available (standardized as tomllib)
 try:
     import tomllib
