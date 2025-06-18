@@ -14,4 +14,5 @@ ENV STREAMLIT_SERVER_HEADLESS=true
 
 EXPOSE 8502
 
-CMD ["streamlit", "run", "graphrag_app.py"] 
+# CMD ["streamlit", "run", "graphrag_app.py"] 
+CMD ["streamlit", "run", "graphrag_app.py", "--server.port", "8052"]
