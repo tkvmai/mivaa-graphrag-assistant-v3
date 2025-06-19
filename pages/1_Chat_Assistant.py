@@ -207,7 +207,9 @@ with col_sources:
                         source_doc = metadata.get("source_document", source_doc)
                     elif isinstance(source, str):
                         source_text = source
-                    st.markdown(f"**Source {i+1} ({source_doc}):**\n> {source_text.replace('\n', '\n> ')}\n---")
+                    # Fix: move .replace() outside the f-string
+                    formatted_text = source_text.replace('\n', '\n> ')
+                    st.markdown(f"**Source {i+1} ({source_doc}):**\n> {formatted_text}\n---")
 # --- End Section ---
 
 # --- Chat Input ---
