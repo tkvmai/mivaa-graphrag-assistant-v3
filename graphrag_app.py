@@ -179,6 +179,13 @@ logger = logging.getLogger(__name__)
 
 
 # --- Configuration Loading Function ---
+def _substitute_env_vars(value):
+    """Helper function to substitute environment variables in configuration values."""
+    if isinstance(value, str) and value.startswith("${") and value.endswith("}"):
+        env_var_name = value[2:-1]  # Remove ${ and }
+        return os.getenv(env_var_name, value)
+    return value
+
 @st.cache_data # Cache the loaded configuration dictionary
 def load_config():
     """
@@ -199,18 +206,18 @@ def load_config():
 
             llm_config = config_toml.get("llm", {})
             config['LLM_MODEL'] = llm_config.get("model")
-            config['LLM_API_KEY'] = llm_config.get("api_key")
-            config['LLM_BASE_URL'] = llm_config.get("base_url")
+            config['LLM_API_KEY'] = _substitute_env_vars(llm_config.get("api_key"))
+            config['LLM_BASE_URL'] = _substitute_env_vars(llm_config.get("base_url"))
             config['LLM_EXTRA_PARAMS'] = llm_config.get("parameters", {})
 
             triple_llm_config = config_toml.get("llm", {}).get("triple_extraction", llm_config)
             config['TRIPLE_EXTRACTION_LLM_MODEL'] = triple_llm_config.get("model", config.get('LLM_MODEL'))
-            config['TRIPLE_EXTRACTION_API_KEY'] = triple_llm_config.get("api_key", config.get('LLM_API_KEY'))
-            config['TRIPLE_EXTRACTION_BASE_URL'] = triple_llm_config.get("base_url", config.get('LLM_BASE_URL'))
+            config['TRIPLE_EXTRACTION_API_KEY'] = _substitute_env_vars(triple_llm_config.get("api_key", config.get('LLM_API_KEY')))
+            config['TRIPLE_EXTRACTION_BASE_URL'] = _substitute_env_vars(triple_llm_config.get("base_url", config.get('LLM_BASE_URL')))
             config['TRIPLE_EXTRACTION_MAX_TOKENS'] = triple_llm_config.get("max_tokens", 1500)
             config['TRIPLE_EXTRACTION_TEMPERATURE'] = triple_llm_config.get("temperature", 0.2)
 
-            config['MISTRAL_API_KEY'] = config_toml.get("llm", {}).get("ocr", {}).get("mistral_api_key")
+            config['MISTRAL_API_KEY'] = _substitute_env_vars(config_toml.get("llm", {}).get("ocr", {}).get("mistral_api_key"))
             config['EMBEDDING_MODEL'] = config_toml.get("embeddings", {}).get("model_name", "all-MiniLM-L6-v2")
             config['CHUNK_SIZE'] = config_toml.get("chunking", {}).get("chunk_size", 1000)
             config['CHUNK_OVERLAP'] = config_toml.get("chunking", {}).get("overlap", 100)

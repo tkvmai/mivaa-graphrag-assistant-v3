@@ -1511,6 +1511,14 @@ class GraphRAGQA:
 if __name__ == "__main__":
     print("--- GraphRAGQA Script Start (Combined Vector/Graph with Retry & Self-Learning) ---")
 
+    # --- Helper function for environment variable substitution ---
+    def _substitute_env_vars(value):
+        """Helper function to substitute environment variables in configuration values."""
+        if isinstance(value, str) and value.startswith("${") and value.endswith("}"):
+            env_var_name = value[2:-1]  # Remove ${ and }
+            return os.getenv(env_var_name, value)
+        return value
+
     # --- Configuration Loading (Ensure this logic is correct as per previous steps) ---
     config_data = {}
     llm_for_correction = None
@@ -1522,8 +1530,8 @@ if __name__ == "__main__":
             logger.info("Loaded config from config.toml")
             llm_config = config_toml.get("llm", {})
             config_data['LLM_MODEL'] = llm_config.get("model")
-            config_data['LLM_API_KEY'] = llm_config.get("api_key")
-            config_data['LLM_BASE_URL'] = llm_config.get("base_url")
+            config_data['LLM_API_KEY'] = _substitute_env_vars(llm_config.get("api_key"))
+            config_data['LLM_BASE_URL'] = _substitute_env_vars(llm_config.get("base_url"))
             config_data['LLM_EXTRA_PARAMS'] = llm_config.get("parameters", {})
             config_data['EMBEDDING_MODEL'] = config_toml.get("embeddings", {}).get("model_name", "all-MiniLM-L6-v2")
             config_data['CHROMA_PERSIST_PATH'] = config_toml.get("vector_db", {}).get('persist_directory', "./chroma_db_embeddings")

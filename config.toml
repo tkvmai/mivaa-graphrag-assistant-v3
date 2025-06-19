@@ -8,20 +8,20 @@ headless = true
 #    api_key = "" # Example for OpenAI (use env var preferably)
 #    base_url = "https://api.openai.com/v1/chat/completions" # Example for OpenAI
     model = "gemini-1.5-flash-latest" # Example for Gemini
-    api_key = "YOUR_LLM_API_KEY"
-    base_url = "YOUR_LLM_BASE_URL_IF_NEEDED" # Example for Gemini
+    api_key = "${LLM_API_KEY}"
+    base_url = "https://generativelanguage.googleapis.com/v1beta/models" # Example for Gemini
     parameters = {}
     max_tokens = 2000
     [llm.ocr]
-    mistral_api_key = "YOUR_MISTRAL_API_KEY"
+    mistral_api_key = "${MISTRAL_API_KEY}"
 
 [llm.triple_extraction]
 #    model = "gpt-4-turbo"  # Example for OpenAI
 #    api_key = "" # Example for OpenAI (use env var preferably)
 #    base_url = "https://api.openai.com/v1/chat/completions" # Example for OpenAI
     model = "gemini-1.5-flash-latest" # Example for Gemini
-    api_key = "YOUR_LLM_API_KEY"
-    base_url = "YOUR_LLM_BASE_URL_IF_NEEDED" # Example for Gemini
+    api_key = "${LLM_API_KEY}"
+    base_url = "https://generativelanguage.googleapis.com/v1beta/models" # Example for Gemini
     triple_extraction_max_tokens = 2000
     triple_extraction_temperature = 0.2
     max_tokens = 2000 # Adjust as needed
