@@ -12,7 +12,6 @@ services:
       - NEO4J_USER=neo4j
       - NEO4J_PASSWORD=j58XWwdZMELLmJ!P
       - LLM_API_KEY=your_llm_api_key
-      - MISTRAL_API_KEY=your_mistral_api_key
     env_file:
       - .env
     volumes:
