@@ -64,7 +64,43 @@ except ImportError as e:
 # Logger setup
 logger = logging.getLogger(__name__)
 if not logging.getLogger().hasHandlers(): # Basic config if needed
-    logging.basicConfig(level=logging.INFO, format='%(asctime)s | %(levelname)s | %(name)s:%(lineno)d | %(message)s')
+    # Load logging configuration from config.toml if available
+    log_level = logging.INFO  # Default
+    log_format = '%(asctime)s | %(levelname)s | %(name)s:%(lineno)d | %(message)s'  # Default
+    
+    try:
+        # Use tomli if available (standardized as tomllib)
+        try:
+            import tomllib
+        except ImportError:
+            try:
+                import tomli as tomllib
+            except ImportError:
+                tomllib = None
+        
+        if tomllib:
+            toml_config_path = Path("config.toml")
+            if toml_config_path.is_file():
+                with open(toml_config_path, "rb") as f:
+                    config_toml = dict(tomllib.load(f))
+                
+                logging_config = config_toml.get("logging", {})
+                level_str = logging_config.get("level", "INFO")
+                log_format = logging_config.get("format", log_format)
+                
+                # Convert string level to logging constant
+                level_map = {
+                    "DEBUG": logging.DEBUG,
+                    "INFO": logging.INFO,
+                    "WARNING": logging.WARNING,
+                    "ERROR": logging.ERROR,
+                    "CRITICAL": logging.CRITICAL
+                }
+                log_level = level_map.get(level_str.upper(), logging.INFO)
+    except Exception:
+        pass  # Use defaults if config loading fails
+    
+    logging.basicConfig(level=log_level, format=log_format)
 
 def process_uploaded_file_ocr(uploaded_file: Any, mistral_client: Optional[Any]) -> Optional[str]:
     """

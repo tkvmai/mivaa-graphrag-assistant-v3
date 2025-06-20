@@ -165,7 +165,37 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # --- Logger Setup ---
-logging.basicConfig(level=logging.INFO, format='%(asctime)s | %(levelname)s | %(name)s:%(lineno)d | %(message)s')
+# Load logging configuration from config.toml if available
+def setup_logging():
+    """Setup logging based on config.toml settings."""
+    log_level = logging.INFO  # Default
+    log_format = '%(asctime)s | %(levelname)s | %(name)s:%(lineno)d | %(message)s'  # Default
+    
+    try:
+        toml_config_path = Path("config.toml")
+        if tomllib and toml_config_path.is_file():
+            with open(toml_config_path, "rb") as f:
+                config_toml = dict(tomllib.load(f))
+            
+            logging_config = config_toml.get("logging", {})
+            level_str = logging_config.get("level", "INFO")
+            log_format = logging_config.get("format", log_format)
+            
+            # Convert string level to logging constant
+            level_map = {
+                "DEBUG": logging.DEBUG,
+                "INFO": logging.INFO,
+                "WARNING": logging.WARNING,
+                "ERROR": logging.ERROR,
+                "CRITICAL": logging.CRITICAL
+            }
+            log_level = level_map.get(level_str.upper(), logging.INFO)
+    except Exception as e:
+        print(f"Warning: Could not load logging config from config.toml: {e}")
+    
+    logging.basicConfig(level=log_level, format=log_format)
+
+setup_logging()
 logger = logging.getLogger(__name__)
 # Optional: Prevent duplicate handlers if logger might be configured elsewhere
 # if len(logger.handlers) > 1: logger.handlers = [logger.handlers[0]]

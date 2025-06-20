@@ -3,6 +3,10 @@ port = 8502
 address = "0.0.0.0"
 headless = true
 
+[logging]
+level = "INFO"  # Set to INFO to reduce DEBUG noise
+format = "%(asctime)s | %(levelname)s | %(name)s:%(lineno)d | %(message)s"
+
 [llm]
 #    model = "gpt-4-turbo"  # Example for OpenAI
 #    api_key = "" # Example for OpenAI (use env var preferably)
